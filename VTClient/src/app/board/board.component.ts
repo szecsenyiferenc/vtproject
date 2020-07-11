@@ -1,3 +1,4 @@
+import { RestBackendService } from './../shared/services/rest-backend.service';
 import { Board } from './../shared/models/board.model';
 import { Component, OnInit } from '@angular/core';
 import { Column } from '../shared/models/column.model';
@@ -9,59 +10,31 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit {
+  board: Board;
 
-  constructor() { }
+  constructor(private rest: RestBackendService) { }
 
-  board: Board = new Board('test board', [
-    new Column('Ideas', [
-      {
-        name: '1. name',
-        description: '1. desc',
-        assigned: '1. assigned',
-        image: null
-      },
-      {
-        name: '2. name',
-        description: '2. desc',
-        assigned: '2. assigned',
-        image: null
-      }
-    ]),
-    new Column('Research', [
-      {
-        name: '1. name',
-        description: '1. desc',
-        assigned: '1. assigned',
-        image: null
-      },
-      {
-        name: '2. name',
-        description: '2. desc',
-        assigned: '2. assigned',
-        image: null
-      }
-    ]),
-    new Column('Todo', [
-      {
-        name: '1. name',
-        description: '1. desc',
-        assigned: '1. assigned',
-        image: null
-      },
-      {
-        name: '2. name',
-        description: '2. desc',
-        assigned: '2. assigned',
-        image: null
-      }
-    ]),
-    new Column('Done', [
+  ngOnInit(): void {
+    this.board = new Board('test board', [
+      new Column('Ideas', [
 
-    ]),
-  ]);
+      ]),
+      new Column('Research', [
 
-  ngOnInit() {
+      ]),
+      new Column('Todo', [
+
+      ]),
+      new Column('Done', [
+
+      ]),
+    ]);
+
+    this.rest.getTickets().subscribe(a => this.board.columns[0].tickets = a);
   }
+
+
+
 
   // todo = [
   //   'Get to work',
@@ -78,7 +51,7 @@ export class BoardComponent implements OnInit {
   //   'Walk dog'
   // ];
 
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: CdkDragDrop<string[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {

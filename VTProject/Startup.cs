@@ -9,12 +9,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using VTProject.Services;
 
 namespace VTProject
 {
     public class Startup
     {
+        readonly string AllowedOrigins = "_allowedOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -26,6 +27,15 @@ namespace VTProject
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: AllowedOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:4200");
+                                  });
+            });
 
             InitDependencyInjection(services);
         }
@@ -40,6 +50,8 @@ namespace VTProject
 
             app.UseRouting();
 
+            app.UseCors(AllowedOrigins);
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -50,7 +62,7 @@ namespace VTProject
 
         private void InitDependencyInjection(IServiceCollection services)
         {
-            services.AddScoped<DatabaseServiceBase, DatabaseServiceBase>();
+            //services.AddScoped<DatabaseServiceBase, DatabaseServiceBase>();
         }
     }
 }

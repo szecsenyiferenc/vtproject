@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using VTProject.DataContext;
+using VTProject.Models.DatabaseModels;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,9 +16,13 @@ namespace VTProject.Controllers
     {
         // GET: api/<TicketController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<TicketModel> Get()
         {
-            return new string[] { "value1", "value2" };
+            var db = new DatabaseContext();
+
+            var posts = db.Tickets;
+
+            return posts;
         }
 
         // GET api/<TicketController>/5
