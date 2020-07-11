@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using VTProject.Models.DatabaseModels;
+using VTProject.Models.DomainModels;
+using VTProject.Services;
 
 namespace VTProject
 {
@@ -62,7 +66,14 @@ namespace VTProject
 
         private void InitDependencyInjection(IServiceCollection services)
         {
-            //services.AddScoped<DatabaseServiceBase, DatabaseServiceBase>();
+            services.AddSingleton<AutoMapper.IConfigurationProvider>(new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<TicketModel, Ticket>();
+                cfg.CreateMap<Ticket, TicketModel>();
+            }));
+            services.AddSingleton<Mapper>();
+            services.AddSingleton<TicketDatabaseService>();
+            services.AddSingleton<DatabaseService>();
         }
     }
 }
