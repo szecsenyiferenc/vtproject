@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using VTProject.Models.DatabaseModels;
 using VTProject.Models.DomainModels;
 using VTProject.Services;
+using VTProject.Services.Database;
 
 namespace VTProject
 {
@@ -30,7 +31,10 @@ namespace VTProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(options => 
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             services.AddCors(options =>
             {
@@ -70,9 +74,17 @@ namespace VTProject
             {
                 cfg.CreateMap<TicketModel, Ticket>();
                 cfg.CreateMap<Ticket, TicketModel>();
+
+                cfg.CreateMap<PersonModel, Person>()
+                .ForMember(dest => dest.Image,
+                opt => opt.MapFrom(src => Convert.ToBase64String(src.Image)));
+                cfg.CreateMap<Person, PersonModel>()
+                .ForMember(dest => dest.Image,
+                opt => opt.MapFrom(src => Convert.FromBase64String(src.Image)));
             }));
             services.AddSingleton<Mapper>();
             services.AddSingleton<TicketDatabaseService>();
+            services.AddSingleton<PersonDatabaseService>();
             services.AddSingleton<DatabaseService>();
         }
     }

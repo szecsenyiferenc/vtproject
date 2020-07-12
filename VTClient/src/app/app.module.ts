@@ -1,3 +1,4 @@
+import { ImagePipe } from './shared/pipes/image.pipe';
 import { RestBackendService } from './shared/services/rest-backend.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -15,7 +16,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
    declarations: [
       AppComponent,
       BoardComponent,
-      TicketComponent
+      TicketComponent,
+      ImagePipe
    ],
    imports: [
       BrowserModule,

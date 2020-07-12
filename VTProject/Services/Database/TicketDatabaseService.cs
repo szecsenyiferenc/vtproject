@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace VTProject.Services
         {
             var db = new DatabaseContext();
 
-            var tickets = db.Tickets;
+            var tickets = db.Tickets.Include(t => t.Assigned);
 
             var res = _mapper.Map<List<Ticket>>(tickets);
 
@@ -45,6 +46,10 @@ namespace VTProject.Services
             var db = new DatabaseContext();
 
             var ticketModel = _mapper.Map<TicketModel>(ticket);
+            if(ticketModel.Assigned != null)
+            {
+                ticketModel.Assigned = db.Persons.Find(ticketModel.Assigned.Id);
+            }
 
             db.Tickets.Add(ticketModel);
             await db.SaveChangesAsync();

@@ -1,4 +1,19 @@
-<div>
-  <div>{{ticket.name}}</div>
-  <div>{{ticket.description}}</div>
+<div class="ticket-container noselect">
+    <img class="ticket-image" [src]="(ticket.assigned.image | image)">
+    <div class="ticket-details">
+      <div class="ticket-name">
+        {{ ticket.name }}
+      </div>
+      <div class="ticket-description">
+        {{ ticket.description }}
+      </div>
+    </div>
+    <div class="ticket-shortname">
+      {{ ticket.shortName }}
+    </div>
+    <div class="ticket-number-container">
+      <div class="ticket-number">
+        10
+      </div>
+  </div>
 </div>
