@@ -1,4 +1,4 @@
-# Task organizer for a construction componay
+# Task organizer for a construction company
 
 _This is an application is a task organizer (similar to kanban board), where you can create task, assign people to it, and move these tasks between columns via drag and drop._
 
